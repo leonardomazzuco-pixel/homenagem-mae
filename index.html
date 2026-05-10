@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Mamãe 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 100%);
+  min-height: 100vh;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* ── CORAÇÃO FLUTUANTE ── */
+.hearts-bg { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.heart { position: absolute; animation: floatHeart linear infinite; opacity: 0.12; }
+@keyframes floatHeart {
+  0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0; }
+  10%  { opacity: 0.12; }
+  90%  { opacity: 0.12; }
+  100% { transform: translateY(-120px) rotate(360deg); opacity: 0; }
+}
+
+/* ── ROLETA PAGE ── */
+#page-roleta {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  max-width: 620px;
+  width: 100%;
+  text-align: center;
+}
+
+.titulo-principal {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  color: #f9c6e0;
+  text-shadow: 0 0 30px rgba(249,198,224,0.5);
+  line-height: 1.3;
+}
+
+.subtitulo {
+  font-size: 1.2rem;
+  color: #d4a8e8;
+  line-height: 1.9;
+  font-weight: 300;
+}
+
+.msg-box {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(249,198,224,0.35);
+  border-radius: 16px;
+  padding: 22px 28px;
+  backdrop-filter: blur(10px);
+  font-size: 1rem;
+  line-height: 1.85;
+  color: #f0e0f8;
+  display: none;
+  animation: fadeIn 0.5s ease;
+}
+.msg-box.visivel { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ROLETA */
+.wheel-wrapper {
+  position: relative;
+  width: 420px;
+  height: 420px;
+  flex-shrink: 0;
+}
+
+.ponteiro {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-top: 36px solid #f9c6e0;
+  z-index: 10;
+  filter: drop-shadow(0 0 10px rgba(249,198,224,0.9));
+}
+
+#wheel-canvas {
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  box-shadow: 0 0 50px rgba(249,198,224,0.3), 0 0 100px rgba(249,198,224,0.12);
+}
+
+.premio-display {
+  display: none;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 7vw, 3.8rem);
+  color: #ffd700;
+  text-shadow: 0 0 30px rgba(255,215,0,0.7);
+  animation: pulsar 1.5s ease-in-out infinite;
+}
+@keyframes pulsar {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.06); }
+}
+
+.btn-girar {
+  background: linear-gradient(135deg, #e91e8c, #9b59b6);
+  border: none;
+  color: white;
+  font-size: 1.15rem;
+  font-family: 'Playfair Display', serif;
+  padding: 15px 46px;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(233,30,140,0.4);
+  transition: all 0.3s;
+  letter-spacing: 1px;
+}
+.btn-girar:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(233,30,140,0.5); }
+.btn-girar:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+/* ── CONFETE ── */
+.confete {
+  position: fixed;
+  top: -12px;
+  border-radius: 2px;
+  animation: confeteCaindo linear forwards;
+  z-index: 200;
+  pointer-events: none;
+}
+@keyframes confeteCaindo {
+  0%   { top: -12px; opacity: 1; }
+  100% { top: 110vh;  opacity: 0; }
+}
+
+/* ── HOMENAGEM PAGE ── */
+#page-homenagem { display: none; }
+
+.hero-homenagem {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #1a0a2e 0%, #3d1a5e 100%);
+  text-align: center;
+  padding: 60px 40px;
+}
+.hero-homenagem h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: #f9c6e0;
+  margin-bottom: 24px;
+  text-shadow: 0 0 40px rgba(249,198,224,0.5);
+}
+.hero-homenagem p {
+  font-size: 1.15rem;
+  color: #d4a8e8;
+  line-height: 1.9;
+  max-width: 580px;
+  font-weight: 300;
+}
+.scroll-hint {
+  margin-top: 48px;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.35);
+  animation: bounce 2.2s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(9px); }
+}
+
+/* SLIDES */
+.slide {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 70px 50px;
+  gap: 70px;
+  flex-wrap: wrap;
+}
+.slide:nth-child(even) { background: rgba(255,255,255,0.03); flex-direction: row-reverse; }
+
+.slide-foto {
+  width: 400px;
+  height: 480px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+  border: 2px solid rgba(249,198,224,0.25);
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #2d1b4e, #4a2070);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.35);
+  text-align: center;
+  padding: 20px;
+  position: relative;
+  transition: transform 0.3s;
+}
+.slide-foto:hover { transform: scale(1.02); }
+.slide-foto img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+.foto-placeholder-icon { font-size: 2.5rem; margin-bottom: 10px; }
+
+.slide-texto { max-width: 420px; }
+.slide-epoca {
+  font-size: 0.8rem;
+  color: #e91e8c;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.slide-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 3vw, 2.7rem);
+  color: #f9c6e0;
+  margin-bottom: 18px;
+  line-height: 1.25;
+}
+.slide-desc {
+  color: #c8a8e0;
+  line-height: 2;
+  font-size: 1.15rem;
+  font-weight: 300;
+}
+
+/* FINAL */
+.secao-final {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 40px;
+  background: linear-gradient(180deg, #1a0a2e, #0d0520);
+}
+.secao-final h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: #f9c6e0;
+  margin-bottom: 24px;
+}
+.secao-final p {
+  color: #d4a8e8;
+  font-size: 1.08rem;
+  line-height: 1.95;
+  max-width: 560px;
+  font-weight: 300;
+}
+.premio-final {
+  margin-top: 44px;
+  padding: 22px 46px;
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  color: #1a0a2e;
+  border-radius: 16px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  box-shadow: 0 10px 40px rgba(255,215,0,0.4);
+  animation: pulsar 2s ease-in-out infinite;
+}
+
+@media (max-width: 700px) {
+  .slide { padding: 50px 24px; gap: 40px; }
+  .slide-foto { width: 280px; height: 320px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Corações flutuantes -->
+<div class="hearts-bg" id="coracoes"></div>
+
+<!-- ══════════ PÁGINA DA ROLETA ══════════ -->
+<div id="page-roleta">
+  <div class="page-content">
+
+    <h1 class="titulo-principal">🌸 Para a Melhor Mãe do Mundo</h1>
+
+    <p class="subtitulo" id="subtitulo-inicial">
+      Como você foi uma mãe incrível por todos esses anos,<br>
+      você tem uma oportunidade especial hoje.<br><br>
+      <strong style="color:#f9c6e0;">Gire a roleta e garanta o seu presente!</strong>
+    </p>
+
+    <div class="msg-box" id="msg-box"></div>
+
+    <div class="wheel-wrapper">
+      <div class="ponteiro"></div>
+      <canvas id="wheel-canvas" width="420" height="420"></canvas>
+    </div>
+
+    <div class="premio-display" id="premio-display"></div>
+
+    <button class="btn-girar" id="btn-girar" onclick="girar()">✨ Girar a Roleta ✨</button>
+
+  </div>
+</div>
+
+<!-- ══════════ PÁGINA DE HOMENAGEM ══════════ -->
+<div id="page-homenagem">
+
+  <div class="hero-homenagem">
+    <h1>Uma Vida de Amor 💕</h1>
+    <p>
+      Cada momento da sua vida é uma história linda que carregaremos para sempre no coração.<br>
+      Essa é a sua trajetória — cheia de força, carinho e amor sem fim.
+    </p>
+    <div class="scroll-hint">↓ Role para ver sua história ↓</div>
+  </div>
+
+  <!-- SLIDE 1 -->
+  <div class="slide">
+    <div class="slide-foto"><img src="img/img1.jpeg" alt="Infância"></div>
+    <div class="slide-texto">
+      <div class="slide-epoca">1975 — A Infância</div>
+      <h2 class="slide-titulo">Uma Menina de Coração Doce</h2>
+      <p class="slide-desc">
+        Em 1975 nascia uma menina especial, cheia de vida e ternura.
+        Cresceu rodeada de muitos irmãos, aprendendo desde cedo
+        o valor do amor em família. Já nessa época, todos percebiam
+        no seu jeito doce e carinhoso algo que só os anos confirmariam:
+        ela era feita para cuidar e amar.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide">
+    <div class="slide-foto"><img src="img/img2.jpeg" alt="Encontrou o amor"></div>
+    <div class="slide-texto">
+      <div class="slide-epoca">O Amor da Vida</div>
+      <h2 class="slide-titulo">Quando o Coração Encontrou o Seu Lar</h2>
+      <p class="slide-desc">
+        A vida reservava uma surpresa linda: Luiz Claudio.
+        Quando os olhos se encontraram, o coração já sabia que
+        era para sempre. Um amor verdadeiro, daqueles que a gente
+        sente antes mesmo de entender.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide">
+    <div class="slide-foto"><img src="img/img3.jpeg" alt="Casamento 1993"></div>
+    <div class="slide-texto">
+      <div class="slide-epoca">1993 — O Grande Dia</div>
+      <h2 class="slide-titulo">Sim, Para Sempre</h2>
+      <p class="slide-desc">
+        Em 1993, ela caminhou em direção ao altar e disse sim ao amor
+        da sua vida. Um vestido branco, um sorriso que iluminava tudo
+        e a certeza de que aquele era apenas o primeiro capítulo de
+        uma história linda que duraria décadas.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 -->
+  <div class="slide">
+    <div class="slide-foto"><img src="img/img4.jpeg" alt="Grávida de Thalyta"></div>
+    <div class="slide-texto">
+      <div class="slide-epoca">Uma Nova Vida a Caminho</div>
+      <h2 class="slide-titulo">O Coração Cresceu Pela Primeira Vez</h2>
+      <p class="slide-desc">
+        A notícia chegou e o mundo ficou mais colorido: ela seria mãe.
+        Com Thalyta a caminho, ela descobriu um amor diferente de tudo
+        que já havia sentido — imenso, incondicional, impossível de
+        caber no peito.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 -->
+  <div class="slide">
+    <div class="slide-foto"><img src="img/img5.jpeg" alt="Thalyta no colo"></div>
+    <div class="slide-texto">
+      <div class="slide-epoca">Nasce Uma Mãe</div>
+      <h2 class="slide-titulo">O Amor Mais Puro do Mundo</h2>
+      <p class="slide-desc">
+        Com Thalyta nos braços, nasceu também a mãe mais dedicada
+        que o mundo poderia conhecer. Cada noite em claro, cada
+        primeiro sorriso, cada passo dado — ela estava lá, inteira,
+        com um amor que não conhece limites.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 -->
+  <div class="slide">
+    <div class="slide-foto"><img src="img/img6.jpeg" alt="Na praça com Thalyta"></div>
+    <div class="slide-texto">
+      <div class="slide-epoca">Dias de Alegria</div>
+      <h2 class="slide-titulo">A Família Ainda Mal Cabia no Coração</h2>
+      <p class="slide-desc">
+        Uma praça, uma tarde ensolarada, uma mãe e sua filha.
+        A família ainda era pequena — mas o amor já transbordava.
+        E a vida, cheia de graça, já guardava mais surpresas
+        lindas pela frente.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 -->
+  <div class="slide">
+    <div class="slide-foto"><img src="img/img7.jpeg" alt="Os quatro filhos"></div>
+    <div class="slide-texto">
+      <div class="slide-epoca">2004 e 2005 — A Família Completa</div>
+      <h2 class="slide-titulo">Quatro Filhos, Um Coração Enorme</h2>
+      <p class="slide-desc">
+        A vida trouxe mais bênçãos: os gêmeos Diogo e Douglas chegaram
+        em 2004, e em 2005 veio Leonardo completar a família.
+        Quatro filhos, quatro razões para sorrir todo dia —
+        e um coração de mãe que cresceu sem parar.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 8 -->
+  <div class="slide">
+    <div class="slide-foto"><img src="img/img8.jpeg" alt="Mãe e Thalyta hoje"></div>
+    <div class="slide-texto">
+      <div class="slide-epoca">Hoje — Mãe e Filha</div>
+      <h2 class="slide-titulo">Um Amor Que Só Cresce</h2>
+      <p class="slide-desc">
+        O tempo passou, Thalyta cresceu — mas o laço entre mãe e filha
+        ficou ainda mais bonito. Hoje são também melhores amigas,
+        cumplicidade construída dia a dia, olhar a olhar, abraço a abraço.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 -->
+  <div class="slide">
+    <div class="slide-foto"><img src="img/img9.jpg" alt="Com os filhos"></div>
+    <div class="slide-texto">
+      <div class="slide-epoca">Nossa Família</div>
+      <h2 class="slide-titulo">O Maior Orgulho da Sua Vida</h2>
+      <p class="slide-desc">
+        Thalyta, Diogo, Douglas e Leonardo — seus quatro maiores orgulhos.
+        Cada um com a sua história, a sua personalidade, o seu caminho.
+        Mas todos com uma coisa em comum: foram criados com muito amor
+        por uma mãe extraordinária.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 10 -->
+  <div class="slide">
+    <div class="slide-foto"><img src="img/img10.jpg" alt="33 anos de casamento"></div>
+    <div class="slide-texto">
+      <div class="slide-epoca">33 Anos Juntos</div>
+      <h2 class="slide-titulo">O Amor Que Resistiu ao Tempo</h2>
+      <p class="slide-desc">
+        Trinta e três anos ao lado de Luiz Claudio — e o amor só ficou
+        mais bonito. Eles provaram que amor de verdade não desbota
+        com o tempo: amadurece, aprofunda e se transforma em algo
+        ainda mais precioso.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 11 -->
+  <div class="slide">
+    <div class="slide-foto"><img src="img/img11.jpg" alt="Com os netos"></div>
+    <div class="slide-texto">
+      <div class="slide-epoca">A Vovó Mais Amada</div>
+      <h2 class="slide-titulo">O Coração Cresceu Mais Uma Vez</h2>
+      <p class="slide-desc">
+        Thiago Felipe e Davi Felipe chegaram para trazer ainda mais
+        alegria à sua vida. Avó! Um título que ela carrega com toda
+        a ternura do mundo — porque esse coração imenso que sempre
+        teve amor pra sobrar, agora transborda de felicidade.
+      </p>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div class="secao-final">
+    <h2>Te Amamos Muito, Mãe! 💕</h2>
+    <p>
+      Obrigada por cada sacrifício, cada abraço, cada palavra de carinho.
+      Você merece todo o amor do mundo — e muito mais.
+      Este presente é uma pequena forma de dizer o quanto somos gratos
+      por ter você em nossas vidas.
+    </p>
+    <div class="premio-final">🎁 Parabéns! Você ganhou R$ 200,00! 🎁</div>
+  </div>
+
+</div><!-- /page-homenagem -->
+
+<script>
+// ── CORAÇÕES FLUTUANTES ──
+const container = document.getElementById('coracoes');
+['💕','💖','💗','💓','🌸','✨','🌺'].forEach((emoji, idx) => {
+  for (let i = 0; i < 3; i++) {
+    const el = document.createElement('div');
+    el.className = 'heart';
+    el.textContent = emoji;
+    el.style.cssText = `
+      left: ${Math.random() * 100}vw;
+      font-size: ${0.9 + Math.random() * 1.4}rem;
+      animation-duration: ${9 + Math.random() * 13}s;
+      animation-delay: ${Math.random() * 18}s;
+    `;
+    container.appendChild(el);
+  }
+});
+
+// ── ROLETA ──
+const canvas  = document.getElementById('wheel-canvas');
+const ctx     = canvas.getContext('2d');
+const W = 420, H = 420, R = 196, cx = W/2, cy = H/2;
+
+const segmentos = [
+  { label: 'R$ 5',   cor: '#c0392b' },
+  { label: 'R$ 40',  cor: '#e67e22' },
+  { label: 'R$ 5',   cor: '#922b21' },
+  { label: 'R$ 15',  cor: '#1a5276' },
+  { label: 'R$ 100', cor: '#d4ac0d' },  // índice 4 → R$100
+  { label: 'R$ 5',   cor: '#922b21' },
+  { label: 'R$ 15',  cor: '#154360' },
+  { label: 'R$ 5',   cor: '#c0392b' },
+  { label: 'R$ 40',  cor: '#ca6f1e' },
+  { label: 'R$ 0',   cor: '#4a4a4a' },  // índice 9 → R$0
+];
+
+const N     = segmentos.length;
+const FATIA = (2 * Math.PI) / N;
+
+function desenharRoleta(angulo) {
+  ctx.clearRect(0, 0, W, H);
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(angulo);
+
+  for (let i = 0; i < N; i++) {
+    const ini = i * FATIA - Math.PI / 2;
+    const fim = ini + FATIA;
+
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, R, ini, fim);
+    ctx.closePath();
+    ctx.fillStyle = segmentos[i].cor;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Texto
+    ctx.save();
+    ctx.rotate(ini + FATIA / 2);
+    ctx.textAlign = 'right';
+    ctx.font = 'bold 18px Lato, sans-serif';
+    ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+    ctx.lineWidth = 4;
+    ctx.lineJoin = 'round';
+    ctx.strokeText(segmentos[i].label, R - 14, 7);
+    ctx.fillStyle = '#fff';
+    ctx.fillText(segmentos[i].label, R - 14, 7);
+    ctx.restore();
+  }
+
+  // Centro
+  ctx.beginPath();
+  ctx.arc(0, 0, 18, 0, 2 * Math.PI);
+  ctx.fillStyle = '#1a0a2e';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+desenharRoleta(0);
+
+// ── LÓGICA DE GIRO ──
+let anguloAtual = 0;
+let rodada = 0;
+let girando = false;
+
+// Para cair no segmento i: anguloFinal ≡ 2π - (i+0.5)*FATIA  (mod 2π)
+function alvoParaSegmento(i) {
+  return 2 * Math.PI - (i + 0.5) * FATIA;
+}
+
+function girar() {
+  if (girando) return;
+  girando = true;
+  rodada++;
+
+  const btn   = document.getElementById('btn-girar');
+  const msgEl = document.getElementById('msg-box');
+  const prem  = document.getElementById('premio-display');
+
+  btn.disabled = true;
+  msgEl.classList.remove('visivel');
+  prem.style.display = 'none';
+
+  // Segmento alvo por rodada: 1→100 (idx 4), 2→0 (idx 9), 3→100 (idx 4)
+  const segAlvo = rodada === 2 ? 9 : 4;
+  const alvo    = alvoParaSegmento(segAlvo);
+
+  const modAtual = ((anguloAtual % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+  let delta = alvo - modAtual;
+  if (delta <= 0) delta += 2 * Math.PI;
+
+  const totalVolta   = 5 * 2 * Math.PI;
+  const anguloFinal  = anguloAtual + totalVolta + delta;
+
+  const duracao = 5000;
+  let inicio = null;
+
+  function easing(t) { return 1 - Math.pow(1 - t, 4); }
+
+  function frame(ts) {
+    if (!inicio) inicio = ts;
+    const t = Math.min((ts - inicio) / duracao, 1);
+    const angulo = anguloAtual + (anguloFinal - anguloAtual) * easing(t);
+    desenharRoleta(angulo);
+
+    if (t < 1) {
+      requestAnimationFrame(frame);
+    } else {
+      anguloAtual = anguloFinal;
+      girando = false;
+      aoTerminar();
+    }
+  }
+
+  requestAnimationFrame(frame);
+}
+
+const MENSAGENS = {
+  ganhou1: `
+    <strong style="font-size:1.2rem;color:#ffd700;">🎉 PARABÉNS! Você ganhou R$ 100,00!</strong><br><br>
+    Mas espera... constou no nosso sistema que, por ter sido a melhor mãe do mundo,
+    você tem direito a <strong>mais uma rodada especial!</strong><br><br>
+    <em>Quem sabe o prêmio não fica ainda maior? 😉</em>
+  `,
+  perdeu: `
+    <strong style="font-size:1.1rem;color:#f9c6e0;">💔 Ops! Não foi dessa vez...</strong><br><br>
+    Mas não se preocupe! Como nós te amamos demais e você merece o mundo inteiro,
+    vamos te dar <strong>mais uma chance</strong> de garantir o seu presente!<br><br>
+    <em>Dessa vez vai! 🍀</em>
+  `,
+  ganhou2: `
+    <strong style="font-size:1.2rem;color:#ffd700;">🎊 INCRÍVEL! R$ 100,00 são seus!</strong><br><br>
+    Era para ser! Afinal, você é a melhor mãe do mundo e merece tudo de bom. 💕<br><br>
+    <em>Preparamos uma surpresa especial para você...</em>
+  `,
+};
+
+function aoTerminar() {
+  const btn   = document.getElementById('btn-girar');
+  const msgEl = document.getElementById('msg-box');
+  const prem  = document.getElementById('premio-display');
+  const sub   = document.getElementById('subtitulo-inicial');
+
+  if (rodada === 1) {
+    prem.textContent = 'R$ 100,00! 🎊';
+    prem.style.color = '#ffd700';
+    prem.style.textShadow = '0 0 30px rgba(255,215,0,0.7)';
+    prem.style.display = 'block';
+    msgEl.innerHTML = MENSAGENS.ganhou1;
+    msgEl.classList.add('visivel');
+    sub.style.display = 'none';
+    btn.textContent = '🍀 Girar Novamente';
+    btn.disabled = false;
+    lancarConfete();
+
+  } else if (rodada === 2) {
+    prem.textContent = 'R$ 0... 😔';
+    prem.style.color = '#888';
+    prem.style.textShadow = 'none';
+    prem.style.display = 'block';
+    msgEl.innerHTML = MENSAGENS.perdeu;
+    msgEl.classList.add('visivel');
+    btn.textContent = '🎲 Última Chance!';
+    btn.disabled = false;
+
+  } else if (rodada === 3) {
+    prem.textContent = 'R$ 100,00! 💰';
+    prem.style.color = '#ffd700';
+    prem.style.textShadow = '0 0 30px rgba(255,215,0,0.7)';
+    prem.style.display = 'block';
+    msgEl.innerHTML = MENSAGENS.ganhou2;
+    msgEl.classList.add('visivel');
+    btn.textContent = '💕 Ver a Homenagem';
+    btn.onclick = mostrarHomenagem;
+    btn.disabled = false;
+    lancarConfete();
+    setTimeout(lancarConfete, 600);
+  }
+}
+
+function lancarConfete() {
+  const cores = ['#f9c6e0','#ffd700','#e91e8c','#9b59b6','#3498db','#2ecc71','#e74c3c'];
+  for (let i = 0; i < 90; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'confete';
+      p.style.cssText = `
+        left: ${Math.random() * 100}vw;
+        background: ${cores[Math.floor(Math.random() * cores.length)]};
+        width: ${6 + Math.random() * 10}px;
+        height: ${6 + Math.random() * 10}px;
+        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+        animation-duration: ${2.5 + Math.random() * 3}s;
+        animation-delay: ${Math.random() * 0.4}s;
+        transform: rotate(${Math.random() * 360}deg);
+      `;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 5000);
+    }, i * 25);
+  }
+}
+
+function mostrarHomenagem() {
+  document.getElementById('page-roleta').style.display = 'none';
+  const pag = document.getElementById('page-homenagem');
+  pag.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
